@@ -53,3 +53,23 @@ module.exports = (on, config) => {
   on("file:preprocessor", watchApp(cucumber()));
 };
 ```
+### How to use on Windows
+
+This example is to use browser-sync with cypress as described at https://www.26brains.com/2019/02/the-holy-grail-cypress-io-browser-sync-automatically-rerun-tests/
+
+On Windows you need cross-env to set WAIT_FOR_MESSAGE variable. Also note double quotes in scripts (`WAIT_FOR_MESSAGE=\"Reloading Browsers...\"`) 
+
+```bash
+npm install --save-dev cross-env npm-run-all
+```
+
+package.json:
+
+```javascript 
+{
+    "serve": "browser-sync start -s src -w --no-open",
+    "cypress": "cypress open",
+    "serveWithCypress": "cross-env WAIT_FOR_MESSAGE=\"Reloading Browsers...\" cypressAppWatcher npm run serve",
+    "test": "npm-run-all --parallel serveWithCypress cypress"
+}
+```

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-const { spawn } = require("child_process");
+const { spawn } = require("cross-spawn");
 const ipc = require("node-ipc");
 ipc.config.silent = true;
 
 let appProc;
 
 function watchIt([command, ...rest]) {
-  appProc = spawn(myArgs[0], rest);
+  appProc = spawn(command, rest);
 
   appProc.stdout.on("data", data => {
     let stringifiedData = data.toString();
@@ -26,7 +26,7 @@ function watchIt([command, ...rest]) {
 }
 
 process.on("uncaughtException", exception => {
-  process.kill(appProc.pid);
+  process.exit(appProc.pid); // switched kill to exit, else invalid pid error on windows
   throw new Error(exception);
 });
 
